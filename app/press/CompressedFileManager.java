@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import play.Play;
 import press.io.CompressedFile;
 
 public abstract class CompressedFileManager {
@@ -54,7 +55,7 @@ public abstract class CompressedFileManager {
 			return null;
 		}
 
-		boolean compress = false;
+		boolean compress = PluginConfig.enabled;
 		List<FileInfo> file_infos = new ArrayList();
 		for (String file_name : loadFiles(key)) {
 			file_infos.add(new FileInfo(compress, manager.checkFileExists(file_name)));
