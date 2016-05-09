@@ -20,4 +20,4 @@
         throw new play.exceptions.TagInternalException("src attribute cannot be empty for press.single-script tag");
     }
 }%
-${ press.Plugin.addSingleJS(_src) }
+<script charset="utf-8" language="javascript" type="text/javascript" src="@{press.Press.getCompressedFromFileName(_src)}"></script>

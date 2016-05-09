@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import play.Play;
 import press.io.CompressedFile;
 
 public abstract class CompressedFileManager {
@@ -32,6 +31,16 @@ public abstract class CompressedFileManager {
 		return getCompressedFile(componentFiles);
 	}
 
+	public CompressedFile getCompressedFileFromName(String fileName, String type) {
+		SourceFileManager manager = getFileManager(type);
+
+		boolean compress = PluginConfig.enabled;
+		List<FileInfo> file_infos = new ArrayList();
+		file_infos.add(new FileInfo(compress, manager.checkFileExists(fileName)));
+
+		return getCompressedFile(file_infos);
+	}
+
 	public CompressedFile getCompressedFileFromConfig(String key, String type) {
 		List<FileInfo> componentFiles = buildDefaultFileInfo(key, type);
 
@@ -45,15 +54,18 @@ public abstract class CompressedFileManager {
 		return getCompressedFile(componentFiles);
 	}
 
-	private List<FileInfo> buildDefaultFileInfo(String key, String type) {
-		SourceFileManager manager;
+	private SourceFileManager getFileManager(String type) {
 		if (type.equals("css")) {
-			manager = new StyleFileManager();
+			return new StyleFileManager();
 		} else if (type.equals("js")) {
-			manager = new ScriptSourceFileManager();
+			return new ScriptSourceFileManager();
 		} else {
 			return null;
 		}
+	}
+
+	private List<FileInfo> buildDefaultFileInfo(String key, String type) {
+		SourceFileManager manager = getFileManager(type);
 
 		boolean compress = PluginConfig.enabled;
 		List<FileInfo> file_infos = new ArrayList();

@@ -34,6 +34,22 @@ public class Press extends Controller {
 		renderCompressedFile(compressedFile, "JavaScript");
 	}
 
+	public static void getCompressedFromFileName(String fileName) {
+		if (fileName == null || fileName.isEmpty()) {
+			notFound();
+		}
+
+		if (fileName.endsWith(".js")) {
+			CompressedFile compressedFile = new ScriptCompressedFileManager().getCompressedFileFromName(fileName, "js");
+			renderCompressedFile(compressedFile, "JavaScript");
+		} else if (fileName.endsWith(".css")) {
+			CompressedFile compressedFile = new StyleCompressedFileManager().getCompressedFileFromName(fileName, "css");
+			renderCompressedFile(compressedFile, "CSS");
+		} else {
+			notFound();
+		}
+	}
+
 	public static void getCompressedJSFromConfig(String key) {
 		if (key == null || key.isEmpty()) {
 			key = "js.conf";
