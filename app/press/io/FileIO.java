@@ -23,6 +23,7 @@ public class FileIO {
      * if the file doesn't exist
      */
     public static VirtualFile getVirtualFile(String filePath) {
+    	filePath = filePath.trim();
         VirtualFile vf = Play.getVirtualFile(filePath);
         if (vf == null) {
             return VirtualFile.open(Play.getFile(filePath));
