@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.zip.GZIPOutputStream;
 
+import models.contextcss.ContextCss;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -15,6 +16,7 @@ import org.joda.time.format.DateTimeFormatter;
 import play.exceptions.UnexpectedException;
 import play.mvc.Controller;
 import play.mvc.Finally;
+import play.vfs.VirtualFile;
 import press.CachingStrategy;
 import press.PluginConfig;
 import press.ScriptCompressedFileManager;
@@ -48,6 +50,17 @@ public class Press extends Controller {
 		} else {
 			notFound();
 		}
+	}
+
+	public static void getThemeCss(String ctx, String timestamp) {
+		String fileName = "themes/theme-" + ctx + "-" + timestamp + ".less";
+		VirtualFile file = VirtualFile.fromRelativePath("public/stylesheets/" + fileName);
+
+		if(!file.exists()) {
+			ContextCss.generateThemeFile(file, ctx);
+		}
+		CompressedFile compressedFile = new StyleCompressedFileManager().getCompressedFileFromName(fileName, "css");
+		renderCompressedFile(compressedFile, "CSS");
 	}
 
 	public static void getCompressedJSFromConfig(String key) {
